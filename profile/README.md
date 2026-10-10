@@ -35,9 +35,9 @@ The engineering team of **Nvisions**, the Korean operator of Dialogue in the Dar
 
 **Commit streaks**<br>Current streak 10 days<br>Best streak 10 days
 
-**Commits per day**<br>Highest in a day at 44 (2026-08-09)<br>Average per active day at ~9.96
+**Commits per day**<br>Highest in a day at 44 (2026-08-09)<br>Average per active day at ~10.05
 
-**Total**<br>747 commits · 75 active days · 11 repositories
+**Total**<br>754 commits · 75 active days · 11 repositories
 
 </td></tr></table>
 
@@ -47,14 +47,14 @@ The engineering team of **Nvisions**, the Korean operator of Dialogue in the Dar
 |---|---|---:|---:|---|---|
 | [at-server](https://github.com/Nvisions-RND/at-server) | TypeScript | 49 | 11 | 2026-04-05 | Automated trading brokerage server |
 | [cafe24-legacy](https://github.com/Nvisions-RND/cafe24-legacy) | JavaScript | 1 | 1 | 2026-09-11 |  |
-| [did-daily](https://github.com/Nvisions-RND/did-daily) | TypeScript | 158 | 27 | 2026-10-09 |  |
-| [did-dstory](https://github.com/Nvisions-RND/did-dstory) | TypeScript | 42 | 12 | 2026-10-10 |  |
+| [did-daily](https://github.com/Nvisions-RND/did-daily) | TypeScript | 161 | 27 | 2026-10-10 |  |
+| [did-dstory](https://github.com/Nvisions-RND/did-dstory) | TypeScript | 45 | 13 | 2026-10-10 |  |
 | [did-optical](https://github.com/Nvisions-RND/did-optical) | TypeScript | 4 | 3 | 2026-10-10 |  |
 | [did-worker](https://github.com/Nvisions-RND/did-worker) | TypeScript | 237 | 48 | 2026-10-10 |  |
 | [didark-site-collab](https://github.com/Nvisions-RND/didark-site-collab) | Java | 2 | 1 | 2026-09-24 | 어둠속의대화 홈페이지 소스 코드 수정 협업 |
 | [infra](https://github.com/Nvisions-RND/infra) | Shell | 8 | 4 | 2026-10-09 | 엔비전스 공용 인프라 — WireGuard VPN 절차·스크립트, AWS 비용 알람(CDK) |
 | [nvisions.co.kr](https://github.com/Nvisions-RND/nvisions.co.kr) | TypeScript | 6 | 2 | 2026-09-12 |  |
-| [nvlink](https://github.com/Nvisions-RND/nvlink) | TypeScript | 236 | 25 | 2026-10-10 |  |
+| [nvlink](https://github.com/Nvisions-RND/nvlink) | TypeScript | 237 | 25 | 2026-10-10 |  |
 | [okpos-lambda](https://github.com/Nvisions-RND/okpos-lambda) | TypeScript | 4 | 2 | 2026-09-17 | OKPOS(okasp) 로그인·판매 조회를 대신 두드리는 AWS Lambda |
 
 <details><summary><b>at-server</b> · 49 commits · 최근 push 2026-04-05</summary>
@@ -67,12 +67,12 @@ The engineering team of **Nvisions**, the Korean operator of Dialogue in the Dar
 <picture><source media="(prefers-color-scheme: dark)" srcset="stats/cafe24-legacy-dark.svg"><img alt="cafe24-legacy 커밋 잔디" src="stats/cafe24-legacy-light.svg" width="760"></picture>
 
 </details>
-<details><summary><b>did-daily</b> · 158 commits · 최근 push 2026-10-09</summary>
+<details><summary><b>did-daily</b> · 161 commits · 최근 push 2026-10-10</summary>
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="stats/did-daily-dark.svg"><img alt="did-daily 커밋 잔디" src="stats/did-daily-light.svg" width="760"></picture>
 
 </details>
-<details><summary><b>did-dstory</b> · 42 commits · 최근 push 2026-10-10</summary>
+<details><summary><b>did-dstory</b> · 45 commits · 최근 push 2026-10-10</summary>
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="stats/did-dstory-dark.svg"><img alt="did-dstory 커밋 잔디" src="stats/did-dstory-light.svg" width="760"></picture>
 
@@ -102,7 +102,7 @@ The engineering team of **Nvisions**, the Korean operator of Dialogue in the Dar
 <picture><source media="(prefers-color-scheme: dark)" srcset="stats/nvisions.co.kr-dark.svg"><img alt="nvisions.co.kr 커밋 잔디" src="stats/nvisions.co.kr-light.svg" width="760"></picture>
 
 </details>
-<details><summary><b>nvlink</b> · 236 commits · 최근 push 2026-10-10</summary>
+<details><summary><b>nvlink</b> · 237 commits · 최근 push 2026-10-10</summary>
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="stats/nvlink-dark.svg"><img alt="nvlink 커밋 잔디" src="stats/nvlink-light.svg" width="760"></picture>
 
@@ -113,7 +113,7 @@ The engineering team of **Nvisions**, the Korean operator of Dialogue in the Dar
 
 </details>
 
-<sub>매일 자동 갱신 — 마지막 갱신 2026-10-10 12:33 KST · 기본 브랜치의 최근 52주 커밋(GitHub commit_activity)</sub>
+<sub>매일 자동 갱신 — 마지막 갱신 2026-10-11 06:05 KST · 기본 브랜치의 최근 52주 커밋(GitHub commit_activity)</sub>
 <!-- stats:end -->
 
 ## 연락
