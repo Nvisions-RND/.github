@@ -1,4 +1,4 @@
-// 조직 프로필 README 의 통계를 만든다 — 저장소별(이름순) 최근 1년 커밋 현황·커밋 정원(잔디), 조직 전체 잔디·3D 잔디·연속 기록.
+// 조직 프로필 README 의 통계를 만든다 — 조직 전체 최근 1년 커밋 잔디와 연속 기록·하루 커밋·합계(가로 한 줄 표).
 //
 //   ORG_TOKEN=<repo 읽기 권한 PAT> node scripts/build-stats.mjs
 //
@@ -127,56 +127,6 @@ function garden(weeks, theme) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif">${parts.join('')}</svg>`
 }
 
-/** 3D 잔디 — 등각 투영한 정육면체, 높이 = 커밋 수 */
-function garden3d(weeks, theme) {
-  const p = PALETTE[theme]
-  const s = 11
-  const cos = Math.cos(Math.PI / 6)
-  const sin = Math.sin(Math.PI / 6)
-  const maxH = 46
-  const max = Math.max(1, ...weeks.flatMap((w) => w.days))
-  const cols = weeks.length
-  const rows = 7
-  const originX = rows * cos * s + 8
-  const originY = 8 + maxH
-  const px = (x, y, h) => [originX + (x - y) * cos * s, originY + (x + y) * sin * s - h]
-  const width = (cols + rows) * cos * s + 16
-  const height = (cols + rows) * sin * s + maxH + 24
-  const parts = []
-  // 바닥
-  const floor = [px(0, 0, 0), px(cols, 0, 0), px(cols, rows, 0), px(0, rows, 0)]
-  parts.push(`<polygon points="${floor.map((pt) => pt.map((v) => v.toFixed(1)).join(',')).join(' ')}" fill="${p.floor}" opacity="0.55"/>`)
-  const cubes = []
-  weeks.forEach((week, x) => week.days.forEach((count, y) => cubes.push({ x, y, count })))
-  cubes.sort((a, b) => a.x + a.y - (b.x + b.y) || a.x - b.x)
-  const shade = (hex, k) => {
-    const n = parseInt(hex.slice(1), 16)
-    const c = (v) => Math.max(0, Math.min(255, Math.round(v * k)))
-    return `#${[(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => c(v).toString(16).padStart(2, '0')).join('')}`
-  }
-  for (const { x, y, count } of cubes) {
-    const level = levelOf(count, max)
-    const h = count > 0 ? Math.max(4, Math.round((count / max) * maxH)) : 1.5
-    const base = level === 0 ? p.empty : p.levels[level - 1]
-    const g = 0.08
-    const [ax, ay] = px(x + g, y + g, h)
-    const [bx, by] = px(x + 1 - g, y + g, h)
-    const [cx, cy] = px(x + 1 - g, y + 1 - g, h)
-    const [dx, dy] = px(x + g, y + 1 - g, h)
-    const [bx0, by0] = px(x + 1 - g, y + g, 0)
-    const [cx0, cy0] = px(x + 1 - g, y + 1 - g, 0)
-    const [dx0, dy0] = px(x + g, y + 1 - g, 0)
-    const f = (pts) => pts.map((v) => v.toFixed(1)).join(' ')
-    parts.push(
-      `<g><title>${new Date(weeks[x].week * 1000).toISOString().slice(0, 10)} 주 · ${count} commits</title>` +
-        `<polygon points="${f([dx, dy, cx, cy, cx0, cy0, dx0, dy0])}" fill="${shade(base, 0.72)}"/>` +
-        `<polygon points="${f([cx, cy, bx, by, bx0, by0, cx0, cy0])}" fill="${shade(base, 0.86)}"/>` +
-        `<polygon points="${f([ax, ay, bx, by, cx, cy, dx, dy])}" fill="${base}"/></g>`,
-    )
-  }
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width.toFixed(0)}" height="${height.toFixed(0)}" viewBox="0 0 ${width.toFixed(0)} ${height.toFixed(0)}">${parts.join('')}</svg>`
-}
-
 // ── 숫자 ────────────────────────────────────────────────────────────────────
 
 function summarize(weeks) {
@@ -204,8 +154,6 @@ const fmtDate = (value) => (value ? new Date(value).toISOString().slice(0, 10) :
 
 for (const theme of ['dark', 'light']) {
   fs.writeFileSync(path.join(statsDir, `org-${theme}.svg`), garden(orgActivity, theme))
-  fs.writeFileSync(path.join(statsDir, `org-3d-${theme}.svg`), garden3d(orgActivity, theme))
-  for (const repo of repos) fs.writeFileSync(path.join(statsDir, `${repo.name}-${theme}.svg`), garden(activity.get(repo.name) ?? [], theme))
 }
 
 const picture = (name, alt, width) =>
@@ -218,39 +166,17 @@ lines.push('## 기여 현황 · 조직 전체 (최근 1년)')
 lines.push('')
 lines.push(picture('org', '조직 전체 커밋 잔디', 760))
 lines.push('')
-lines.push('<table><tr>')
-lines.push(`<td>${picture('org-3d', '조직 전체 커밋 잔디(3D)', 560)}</td>`)
-lines.push('<td valign="top">')
-lines.push('')
-lines.push(`**Commit streaks**<br>Current streak ${org.current} days<br>Best streak ${org.best} days`)
-lines.push('')
+// 2026-10-11 3D 잔디·저장소별 표·저장소별 잔디를 뺐다(공개 README 에 비공개 저장소 이름이 보이던 것도 함께) — 숫자는 가로 한 줄 표로
+const b = (value) => `<b>${value}</b>`
+lines.push('<table>')
+// 칸 폭을 위 잔디(760px)에 맞춘다 — GitHub 는 table 폭은 무시하고 칸 폭(width)은 따른다
+lines.push('<tr><th width="253">Commit streaks</th><th width="253">Commits per day</th><th width="253">Total</th></tr>')
 lines.push(
-  `**Commits per day**<br>Highest in a day at ${org.highest.n}${org.highest.date ? ` (${fmtDate(org.highest.date)})` : ''}<br>Average per active day at ~${org.average.toFixed(2)}`,
+  `<tr><td align="center">Current ${b(`${org.current} days`)}<br>Best ${b(`${org.best} days`)}</td>` +
+    `<td align="center">Highest ${b(org.highest.n)}${org.highest.date ? ` <sub>(${fmtDate(org.highest.date)})</sub>` : ''}<br>Average ${b(`~${org.average.toFixed(2)}`)} <sub>per active day</sub></td>` +
+    `<td align="center">${b(org.total.toLocaleString('en-US'))} commits<br>${b(org.active)} active days · ${b(repos.length)} repositories</td></tr>`,
 )
-lines.push('')
-lines.push(`**Total**<br>${org.total.toLocaleString('en-US')} commits · ${org.active} active days · ${repos.length} repositories`)
-lines.push('')
-lines.push('</td></tr></table>')
-lines.push('')
-lines.push('## 저장소별 커밋 현황 (이름순, 최근 1년)')
-lines.push('')
-lines.push('| 저장소 | 언어 | 커밋 | 활동일 | 최근 push | 설명 |')
-lines.push('|---|---|---:|---:|---|---|')
-for (const repo of repos) {
-  const s = summarize(activity.get(repo.name) ?? [])
-  lines.push(
-    `| [${repo.name}](${repo.html_url}) | ${repo.language ?? '-'} | ${s.total.toLocaleString('en-US')} | ${s.active} | ${fmtDate(repo.pushed_at)} | ${(repo.description ?? '').replace(/\|/g, '\\|')} |`,
-  )
-}
-lines.push('')
-for (const repo of repos) {
-  const s = summarize(activity.get(repo.name) ?? [])
-  lines.push(`<details><summary><b>${repo.name}</b> · ${s.total.toLocaleString('en-US')} commits · 최근 push ${fmtDate(repo.pushed_at)}</summary>`)
-  lines.push('')
-  lines.push(picture(repo.name, `${repo.name} 커밋 잔디`, 760))
-  lines.push('')
-  lines.push('</details>')
-}
+lines.push('</table>')
 lines.push('')
 lines.push(`<sub>매일 자동 갱신 — 마지막 갱신 ${kst} KST · 기본 브랜치의 최근 52주 커밋(GitHub commit_activity)</sub>`)
 
